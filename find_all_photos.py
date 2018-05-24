@@ -18,11 +18,11 @@ import hashlib  # Use crypto hash function consistent across runs
 import sqlite3
 
 """  Set up pointers to control the file directory scans  """ 
-cur_dir = 'C:\\Users\\Leo\\Google Drive\\Coding\\image_dedup\\test_files\\'
+cur_dir = 'G:\\My Drive\\Coding\\image_dedup\\test_files\\'
 #cur_dir = 'C:\\Users\\Leo\\Pictures\\'
 #cur_dir = 'C:\\Users\\Leo\\Pictures\\2006 photos\\'
 #root_path = 'C:\\Users\\Leo\\Pictures\\'
-root_path = 'C:\\Users\\Leo\\Google Drive\\Coding\\image_dedup\\test_files\\'
+root_path = 'G:\\My Drive\\Coding\\image_dedup\\test_files\\'
 #root_path = 'C:\\Users\\Leo\\Google Drive\\Coding\\image_dedup\\'
 """  Set up image databae  """
 conn = sqlite3.connect(root_path + 'imagesDB.sqlite')
@@ -40,12 +40,11 @@ cur.executescript('''
             exif_hash TEXT,
             size INTEGER,
             created FLOAT, 
-            id_state TEXT,
+            status TEXT,
             hash_state TEXT,
             parent_id INTEGER,
             new_path TEXT,
-            new_name TEXT,
-            status TEXT
+            new_name TEXT
             );
     ''')
 
@@ -91,7 +90,7 @@ for dirpath, dirnames, filenames in os.walk(cur_dir):
             unique_id = str(exif_tags['EXIF ImageUniqueID'])
             c_time = os.stat(filefullpath).st_ctime  # Get time file created
             file_size = os.stat(filefullpath).st_size  # Gt file size
-            if dirpath[:15] == "non_ref_folder":
+            if dirpath[-15:] == "non_ref_folders":
                 ref = False
             else:
                 ref = True
