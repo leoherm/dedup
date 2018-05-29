@@ -8,7 +8,7 @@ and store in a database
 Then run find_dup_images.py, then move_images.py
 
 Created on Mon Jan 26 21:12:14 2018
-Modified May 24 2018
+Modified May 29 2018
 
 @author: Leo
 """
@@ -33,6 +33,7 @@ cur.executescript('''
             image_id INTEGER PRIMARY KEY UNIQUE,
             path TEXT,
             file_name TEXT,
+            file_name_lower TEXT,
             ref_folder BOOLEAN,
             model TEXT,
             img_type TEXT,
@@ -95,10 +96,10 @@ for dirpath, dirnames, filenames in os.walk(cur_dir):
             else:
                 ref = True
 #  Write to DB            
-            cur.execute('''INSERT INTO all_images (path, file_name, ref_folder, model,
-                        img_type, exif_id, exif_hash, size, created) 
-                        VALUES (?,?,?,?,?,?,?,?,?)''',
-                        (dirpath, file, ref, model, img_type, unique_id, hash_str, 
+            cur.execute('''INSERT INTO all_images (path, file_name, file_name_lower, 
+                        ref_folder, model, img_type, exif_id, exif_hash, size, created) 
+                        VALUES (?,?,?,?,?,?,?,?,?,?)''',
+                        (dirpath, file, file.lower(), ref, model, img_type, unique_id, hash_str, 
                          file_size, c_time))
             
             print(file, image_count)
